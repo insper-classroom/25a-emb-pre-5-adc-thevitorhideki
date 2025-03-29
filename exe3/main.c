@@ -23,16 +23,34 @@ void data_task(void *p) {
     }
 }
 
+void mobile_average(int *vec, int n) {
+    int average = 0;
+
+    for (int i = 0; i < n; i++) {
+        average += vec[i];
+    }
+
+    average /= n;
+
+    printf("%d\n", average);
+}
+
 void process_task(void *p) {
     int data = 0;
+    int vec[5] = {0, 0, 0, 0, 0};
+    int count = 0;
 
     while (true) {
         if (xQueueReceive(xQueueData, &data, 100)) {
-            // implementar filtro aqui!
+            vec[count] = data;
 
+            if (count == 4) {
+                count = 0;
+            } else {
+                count++;
+            }
 
-
-
+            mobile_average(vec, 5);
             // deixar esse delay!
             vTaskDelay(pdMS_TO_TICKS(50));
         }
